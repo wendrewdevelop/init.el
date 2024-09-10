@@ -37,7 +37,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(flycheck apropospriate-theme dracula-theme monokai-theme spacemacs-theme zenburn-theme timu-macos-theme treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil dired-sidebar all-the-icons neotree auto-complete which-key use-package try)))
+   '(ergoemacs-mode gruvbox-theme melancholy color-theme-sanityinc-tomorrow ample-theme pyvenv flycheck apropospriate-theme dracula-theme monokai-theme spacemacs-theme zenburn-theme timu-macos-theme treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil dired-sidebar all-the-icons neotree auto-complete which-key use-package try)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -182,7 +182,8 @@
         ("C-x t B"   . treemacs-bookmark)
         ("C-x t C-t" . treemacs-find-file)
         ("C-x t M-t" . treemacs-find-tag)
-	("C-\\" . treemacs)))
+	("C-\\" . treemacs)
+	("C-x t a" . treemacs-add-project-to-workspace)))
 
 (use-package ace-window
   :ensure t
@@ -207,15 +208,17 @@
   (split-window-below)
   ;; Mudar para a nova janela
   (other-window 1)
+  (let ((default-height 10))  ;; Ajuste o número de linhas aqui
+    (window-resize nil (- default-height (window-height))))
   ;; Iniciar o eshell
   (eshell)
   (eshell-return-to-prompt)
-  (insert "exit")
-  (insert "clear")
   (insert "cd")
+  (eshell-send-input)
+  (insert "clear")
   (eshell-send-input))
 
-(global-set-key (kbd "C-c t") 'open-terminal-in-split)
+(global-set-key (kbd "C-c t") 'open-eshell-in-split)
 
 ;; Auto save
 (setq auto-save-timeout 5)
@@ -225,3 +228,25 @@
 
 (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 (run-with-idle-timer 60 t 'save-some-buffers t)
+
+(global-set-key (kbd "C-x C-k") 'kill-this-buffer)
+
+(use-package pyvenv
+  :ensure t)
+
+
+(add-to-list 'custom-theme-load-path "/home/wendrew/.emacs.d/atom-one-dark-theme/")
+(load-theme 'atom-one-dark t)
+
+(use-package ace-window
+  :ensure t
+  :bind ("C-x o" . ace-window))
+
+(use-package ergoemacs-mode
+  :ensure t
+  :config
+  (progn
+    (setq ergoemacs-theme nil)
+    (setq ergoemacs-keyboard-layout "us")
+    (ergoemacs-mode 1)))
+
