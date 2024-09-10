@@ -216,3 +216,12 @@
   (eshell-send-input))
 
 (global-set-key (kbd "C-c t") 'open-terminal-in-split)
+
+;; Auto save
+(setq auto-save-timeout 5)
+(setq auto-save-interval 100)
+;(setq auto-save-file-name-transforms
+;     ((".*" . ,temporary-file-directory)))
+
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
+(run-with-idle-timer 60 t 'save-some-buffers t)
